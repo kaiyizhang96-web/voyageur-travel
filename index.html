@@ -517,6 +517,33 @@ button { cursor: pointer; }
 .contract-paper footer { margin-top:26px; color:var(--muted); font-size:11px; }
 @media(max-width:600px){.contract-parties{grid-template-columns:1fr}.contract-actions{align-items:stretch;flex-direction:column}.contract-actions .btn{justify-content:center}.contract-acceptance>div{flex-direction:column;gap:3px}}
 @media print{.print-hidden,.topbar,.bottom-nav{display:none!important}.app-shell{padding:0}.placeholder-page{padding:0}.contract-paper{box-shadow:none;border:0;max-width:none}.contract-section{break-inside:avoid}}
+
+/* Reference mobile-app shell and homepage */
+.app-shell { width:min(100%,480px); margin:0 auto; background:#f7f6f2; box-shadow:0 0 40px rgba(30,25,20,.08); }
+.app-shell .container { width:calc(100% - 32px); }
+.app-shell .desktop-nav { display:none; }
+.app-shell>.bottom-nav { display:block; left:50%; right:auto; width:min(100%,480px); transform:translateX(-50%); }
+.topbar-inner { position:relative; height:112px; justify-content:center; }
+.topbar .brand { color:var(--text); gap:16px; }
+.topbar .brand-mark { width:auto; height:auto; border-radius:0; background:none; color:var(--text); font-family:Arial,sans-serif; font-size:54px; font-weight:800; }
+.topbar .brand-text { display:flex; flex-direction:column; color:var(--text); font-family:Arial,sans-serif; font-size:15px; letter-spacing:.26em; line-height:1.25; }
+.topbar .brand-text small { margin-top:5px; color:var(--muted); font-size:10px; letter-spacing:.28em; }
+.language-toggle { position:absolute; right:0; z-index:3; width:54px; height:54px; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--text); font-size:15px; font-weight:800; box-shadow:0 4px 12px rgba(0,0,0,.08); }
+.hero { padding:0 0 16px; }
+.hero-card { min-height:390px; padding:26px 24px; border-radius:0 0 26px 26px; }
+.hero h1 { max-width:390px; font-family:Arial,'PingFang SC',sans-serif; font-size:32px; line-height:1.2; }
+.hero p { font-size:15px; line-height:1.75; }
+.hero-content .eyebrow { font-size:11px; }
+.hero-content .btn { border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.12); color:#fff; backdrop-filter:blur(8px); }
+.hero-dots { bottom:18px; }
+.hero-arrow { display:none; }
+.home-shortcuts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.home-shortcut { min-height:70px; display:flex; align-items:center; justify-content:center; padding:12px; border:1px solid #d9d6cf; border-radius:19px; background:#fff; color:#171717; font-size:15px; text-align:center; }
+button.home-shortcut { width:100%; }
+.home-shortcut.dark { background:#171717; color:#fff; }
+.home-shortcut.accent { border-color:#cb482f; background:#cb482f; color:#fff; }
+.section-tight { padding-top:12px; }
+@media(max-width:420px){.topbar-inner{height:100px}.topbar .brand{max-width:245px;gap:10px}.topbar .brand-mark{font-size:46px}.topbar .brand-text{font-size:11px;letter-spacing:.20em}.topbar .brand-text small{font-size:8px}.language-toggle{width:48px;height:48px}.hero-card{min-height:370px}.home-shortcut{min-height:64px;font-size:14px}}
 .fleet-empty { grid-column:1/-1; justify-items:center; text-align:center; padding:44px; }
 .fleet-promise-section { padding-top:22px; padding-bottom:82px; }
 .fleet-promise-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
@@ -1242,6 +1269,12 @@ hr, .divider { border-color:#e1c3ae; }
 .booking-card{padding:22px;display:grid;gap:16px;border:2px solid rgba(155,58,40,.16)}
 .booking-card h3,.checkout-panel h2{margin:0}.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.booking-field{display:grid;gap:6px}.booking-field.full{grid-column:1/-1}.booking-field label{font-size:11px;font-weight:900;letter-spacing:.05em;color:var(--muted)}.booking-field input,.booking-field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit}.payment-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.payment-choice label{border:1px solid var(--line);border-radius:11px;padding:10px;font-size:12px;cursor:pointer}.booking-total{background:#fff6ec;border-radius:13px;padding:14px;display:grid;gap:6px}.booking-total div{display:flex;justify-content:space-between;gap:15px}.booking-total .due{border-top:1px solid var(--line);padding-top:9px;font-weight:900;color:var(--accent)}.booking-hint{font-size:11px;color:var(--muted);margin:0}.checkout-page{padding:54px 0 90px}.checkout-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:24px;align-items:start}.checkout-panel{padding:26px}.checkout-methods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.checkout-method{position:relative}.checkout-method input{position:absolute;opacity:0}.checkout-method span{display:block;border:1px solid var(--line);border-radius:13px;padding:15px;font-weight:800}.checkout-method input:checked+span{border:2px solid var(--accent);background:#fff6ec}.zelle-note{background:#6d1ed4;color:#fff;padding:15px;border-radius:13px;font-size:13px}.checkout-status{padding:13px;border-radius:11px;background:#fff6ec;color:var(--accent);font-size:13px}.checkout-status.error{background:#fff0ed}.secure-note{font-size:11px;color:var(--muted);text-align:center}.order-lines{display:grid;gap:9px}.order-lines div{display:flex;justify-content:space-between;gap:18px}.order-lines .grand{font-size:18px;font-weight:900;border-top:1px solid var(--line);padding-top:13px}
 @media(max-width:760px){.booking-grid,.checkout-layout,.checkout-methods{grid-template-columns:1fr}.booking-field.full{grid-column:auto}}
+.app-shell>.topbar{background:rgba(247,246,242,.96)!important;border-bottom:1px solid #dedbd1;box-shadow:none}
+.app-shell>.topbar .brand,.app-shell>.topbar .brand-mark,.app-shell>.topbar .brand-text{color:#171717!important}
+.app-shell>.topbar .brand-text small{color:#777!important}
+.app-shell>.topbar .brand-text{max-width:none!important;overflow:visible!important;text-overflow:clip!important}
+.app-shell .hero-card{border-radius:0 0 26px 26px!important}
+@media(max-width:720px){.app-shell .hero-card{min-height:370px;padding:26px 24px;border-radius:0 0 26px 26px!important}}
 </style>
 
 
@@ -1908,10 +1941,10 @@ function clientLayout(content, route) {
         <div class="container topbar-inner">
           <a class="brand" href="#/">
             <span class="brand-mark">V</span>
-            <span class="brand-text">VOYAGEUR <small>持牌精品小团</small></span>
+            <span class="brand-text">VOYAGEUR TRAVEL <small>&amp; VOYAGEUR JOURNEY</small></span>
           </a>
           <nav class="desktop-nav">${nav}</nav>
-          <a class="admin-entry" href="#/admin/login">管理后台</a>
+          <button class="language-toggle" type="button" title="English version">EN</button>
         </div>
       </header>
       ${content}
@@ -2010,6 +2043,14 @@ function imageBox(image, fallback, extraClass = '') {
 function renderHome() {
   const data = getData();
   const slides = data.carousel.filter((x) => x.visible).sort((a, b) => a.order - b.order);
+  const westernTrip = data.trips.find((x) => x.visible && /美西.*四日|四日.*美西/.test(x.title));
+  const canyonTrip = data.trips.find((x) => x.visible && /大峡谷.*南缘|南缘.*大峡谷/.test(x.title));
+  const homeSlides = [{
+    image: canyonTrip?.coverImage || westernTrip?.coverImage || slides[0]?.image || '',
+    title: '放心 · 顺心 · 舒心 · 贴心',
+    subtitle: 'VOYAGEUR TRAVEL USA。合同、保险与公司账户收款，让每一段旅程更安心。',
+    target: westernTrip ? tripDetailPath(westernTrip) : '/trips/multi'
+  }, ...slides.slice(0, 3)];
   const featured = data.trips.filter((x) => x.visible && x.featured).slice(0, 3);
   const plan = data.dailyPlans.find((x) => x.date === todayISO() && !x.completed)
     || data.dailyPlans.find((x) => !x.completed);
@@ -2020,20 +2061,18 @@ function renderHome() {
   const licenses = data.licenses.filter((x) => x.visible).sort((a, b) => a.order - b.order).slice(0, 2);
   const totalTrips = data.trips.filter((x) => x.visible).length;
 
-  const heroSlides = slides.length
-    ? slides.map(heroSlide).join('')
-    : heroSlide({ title: '把旅程，做成只属于你的路线。', subtitle: '从拉斯维加斯出发，定制你的下一段旅程。', target: '/trips' }, 0);
+  const heroSlides = homeSlides.map(heroSlide).join('');
 
-  const dots = (slides.length || 1) > 1
-    ? `<div class="hero-dots" aria-label="轮播图切换">${(slides.length ? slides : [1]).map((_, index) => `<button class="hero-dot ${index === 0 ? 'active' : ''}" type="button" data-hero-dot="${index}" aria-label="显示第 ${index + 1} 张图片"></button>`).join('')}</div>`
+  const dots = homeSlides.length > 1
+    ? `<div class="hero-dots" aria-label="轮播图切换">${homeSlides.map((_, index) => `<button class="hero-dot ${index === 0 ? 'active' : ''}" type="button" data-hero-dot="${index}" aria-label="显示第 ${index + 1} 张图片"></button>`).join('')}</div>`
     : '';
 
   return `
-    <section class="hero" data-home-carousel data-hero-count="${Math.max(slides.length, 1)}">
+    <section class="hero" data-home-carousel data-hero-count="${homeSlides.length}">
       <div class="container">
         <div class="hero-card">
           ${heroSlides}
-          ${(slides.length || 1) > 1 ? `
+          ${homeSlides.length > 1 ? `
             <button class="hero-arrow hero-prev" type="button" data-hero-prev aria-label="上一张">‹</button>
             <button class="hero-arrow hero-next" type="button" data-hero-next aria-label="下一张">›</button>` : ''}
           ${dots}
@@ -2043,12 +2082,17 @@ function renderHome() {
 
     <section class="section section-tight">
       <div class="container">
-        <div class="quick-grid">
-          ${data.contacts.phone ? `<a class="card contact-card" href="tel:${esc(data.contacts.phone)}"><div class="icon">☎</div><div><h3>电话</h3><p>${esc(data.contacts.phone)}</p></div><span class="card-arrow">→</span></a>` : `<div class="card contact-card contact-unavailable"><div class="icon">☎</div><div><h3>电话</h3><p>暂未设置</p></div><span class="card-arrow">—</span></div>`}
-          <div class="card contact-card contact-static ${data.contacts.wechat ? '' : 'contact-unavailable'}" title="${data.contacts.wechat ? `微信号：${esc(data.contacts.wechat)}` : '微信暂未设置'}">
-            <div class="icon">微</div><div><h3>微信</h3><p>${esc(data.contacts.wechat || '暂未设置')}</p></div><span class="card-arrow">${data.contacts.wechat ? '复制号码' : '—'}</span>
-          </div>
-          ${data.contacts.email ? `<a class="card contact-card" href="mailto:${esc(data.contacts.email)}"><div class="icon">✉</div><div><h3>Email</h3><p>${esc(data.contacts.email)}</p></div><span class="card-arrow">→</span></a>` : `<div class="card contact-card contact-unavailable"><div class="icon">✉</div><div><h3>Email</h3><p>暂未设置</p></div><span class="card-arrow">—</span></div>`}
+        <div class="home-shortcuts">
+          <a class="home-shortcut dark" href="tel:${esc(data.contacts.phone||'')}">☎　打电话</a>
+          <a class="home-shortcut" href="mailto:${esc(data.contacts.email||'')}">✉　发邮件</a>
+          <button class="home-shortcut contact-static" type="button">▣　微信 ${esc(data.contacts.wechat||'Voyageur_lx')}</button>
+          <a class="home-shortcut" href="#/trips/multi">▣　大巴行程</a>
+          <a class="home-shortcut accent" href="#/trips/day">一日游 下谷 $259</a>
+          <a class="home-shortcut dark" href="#/companion">伴旅行</a>
+          <a class="home-shortcut" href="#/charter">七座商务车包车</a>
+          <a class="home-shortcut" href="#/inquiry?subject=${encodeURIComponent('洛杉矶—拉斯维加斯往返')}">洛杉矶—拉斯维加斯往返</a>
+          <a class="home-shortcut" href="#/inquiry?type=charter">拉斯维加斯市区包车</a>
+          <a class="home-shortcut" href="#/vegas">拉斯维加斯指南</a>
         </div>
       </div>
     </section>
