@@ -2615,6 +2615,24 @@ function renderPlay() {
   return `<section class="placeholder-page"><div class="container"><div class="eyebrow accent-text">PLAY &amp; TICKETS</div><h1 class="page-title">玩乐</h1><p class="page-subtitle">门票、体验和演出需要先确认日期、场次与实时库存，确认前请勿付款。</p><div class="module-grid">${products.map(([name,type,note])=>`<article class="card module-card"><div class="icon">票</div><h3>${name}</h3><p>${type}</p><small>${note}</small><a class="detail-link" href="#/inquiry?type=play&amp;subject=${encodeURIComponent(name)}">咨询预订 →</a></article>`).join('')}</div></div></section>`;
 }
 
+function renderLegalPage(type) {
+  const privacy=[
+    ['我们收集的信息',['预订人姓名、联系电话、微信、电子邮箱。','出发日期、人数、同行人姓名、接送地点、行程选择和特殊需求。','订单金额、币种、拟使用的付款方式和合同确认时间；网站不会直接保存完整银行卡资料。']],
+    ['资料用途',['用于确认库存、安排车辆与司导、预订门票、发送合同和订单通知。','为履行行程，必要资料可能提供给已确认的门票、酒店、交通或活动供应商。','除履行订单、法律要求或取得同意外，不出售客人个人资料。']],
+    ['客片许可与撤下',['客人照片只有在取得明确许可后才会公开展示。','客人可以随时联系客服要求撤下已授权照片；核实后会尽快处理。','不得上传无权提供、涉及未成年人但未经监护人许可的照片。']],
+    ['第三方服务',['订单邮件可能通过受委托的邮件转发服务发送；付款由确认后的支付渠道处理。','第三方服务按其隐私政策处理必要资料，请勿通过公开留言发送护照、银行卡等敏感资料。']],
+    ['联系与更正',['如需查询、更正或删除资料，请联系 VOYAGEUR：+1 626-889-0616，微信 Voyageur_lx，邮箱 zwenting1984@gmail.com。']]
+  ];
+  const copyright=[
+    ['网站内容',['VOYAGEUR 名称、版面、原创文字、行程编排、图形和自有照片受相关法律保护。','未经书面许可，不得复制、转载、出售、重新发布或用于其他旅行产品。']],
+    ['客人照片',['客片仅供网站浏览，不代表允许下载、截取或再次发布。','照片版权仍归原作者或权利人；VOYAGEUR 仅在授权范围内展示。']],
+    ['第三方资料',['景点、国家公园、车辆及合作供应商名称和商标归各自权利人所有。','引用的官方政策以相应机构最新公布内容为准。']],
+    ['侵权与撤下',['如认为网站内容侵犯你的权利，请发送作品说明、具体页面、权利证明和联系方式至 zwenting1984@gmail.com。','核实后会及时限制访问、移除或更正相关内容。']]
+  ];
+  const isPrivacy=type==='privacy',sections=isPrivacy?privacy:copyright;
+  return `<section class="placeholder-page policy-page"><div class="container"><a class="back-link" href="#/more">← 返回更多</a><div class="eyebrow accent-text">VOYAGEUR LEGAL</div><h1 class="page-title">${isPrivacy?'隐私政策':'版权保护'}</h1><p class="page-subtitle">${isPrivacy?'说明预订资料、客片许可和第三方服务的处理方式。':'说明网站内容、客片和第三方资料的使用边界。'}</p><div class="policy-grid">${sections.map(([title,items])=>`<article class="card policy-card"><h2>${title}</h2><ul>${items.map(item=>`<li>${item}</li>`).join('')}</ul></article>`).join('')}</div><div class="card policy-disclaimer"><strong>联系 VOYAGEUR</strong><p>电话 +1 626-889-0616 · 微信 Voyageur_lx · 邮箱 zwenting1984@gmail.com</p></div></div></section>`;
+}
+
 function renderNotFound() {
   return `<section class="placeholder-page"><div class="container"><div class="card not-found-card"><div class="icon">?</div><h1>页面没有找到</h1><p>这个链接可能已经失效，或者页面地址不正确。</p><div class="success-actions"><a class="btn btn-primary" href="#/">返回首页</a><a class="btn btn-light" href="#/trips">浏览行程</a></div></div></div></section>`;
 }
@@ -2781,6 +2799,8 @@ function renderClientPage(route) {
   if (routePath === '/inquiry/success') return renderInquirySuccess(route);
   if (routePath === '/more') return renderMore(data);
   if (routePath === '/policies') return renderPolicies(data);
+  if (routePath === '/privacy') return renderLegalPage('privacy');
+  if (routePath === '/copyright') return renderLegalPage('copyright');
   const referenceModule=renderReferenceModule(routePath);
   if(referenceModule)return referenceModule;
   return renderNotFound();
