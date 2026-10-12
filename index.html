@@ -2564,6 +2564,19 @@ function renderPolicies(data) {
     </section>`;
 }
 
+function renderCart(data) {
+  let booking=null;try{booking=JSON.parse(sessionStorage.getItem('voyageur:checkout')||'null')}catch{}
+  const trip=booking&&data.trips.find(item=>item.id===booking.tripId);
+  if(!booking||!trip)return `<section class="placeholder-page"><div class="container"><a class="back-link" href="#/more">← 返回更多</a><div class="card not-found-card"><div class="icon">单</div><h1>行程单</h1><p>还没有选择行程。请先选择产品、日期和人数。</p><a class="btn btn-primary" href="#/trips">浏览行程</a></div></div></section>`;
+  return `<section class="placeholder-page"><div class="container"><a class="back-link" href="#${tripDetailPath(trip)}">← 返回修改</a><div class="eyebrow accent-text">TRIP ORDER</div><h1 class="page-title">行程单</h1><p class="page-subtitle">请核对日期、人数、产品和金额，确认无误后继续填写客人资料与合同。</p><div class="checkout-layout"><article class="card checkout-panel"><h2>${esc(trip.title)}</h2><div class="order-lines"><div><span>出发日期</span><strong>${esc(booking.date)}</strong></div><div><span>成人</span><strong>${booking.adults} 人</strong></div><div><span>儿童</span><strong>${booking.children} 人</strong></div><div><span>总人数</span><strong>${booking.people} 人</strong></div>${booking.variant?`<div><span>产品 / 房型</span><strong>${esc(booking.variant)}</strong></div>`:''}${booking.ticket?`<div><span>门票</span><strong>${esc(booking.ticket)}</strong></div>`:''}<div><span>付款安排</span><strong>${booking.payMode==='deposit'?'定金':'全款'}</strong></div><div><span>结算币种</span><strong>${booking.currency==='CNY'?'人民币 CNY':'美元 USD'}</strong></div><div><span>订单总额</span><strong>${esc(booking.totalFormatted)}</strong></div><div class="grand"><span>确认后应付</span><strong>${esc(booking.dueFormatted)}</strong></div></div><div class="success-actions"><a class="btn btn-secondary" href="#${tripDetailPath(trip)}">修改选择</a><a class="btn btn-primary" href="#/checkout">填写资料与合同</a></div></article><aside class="card checkout-panel"><h3>付款前须知</h3><p>提交订单不会自动扣款。VOYAGEUR 会先确认日期、座位、门票库存与最终金额，再发送付款指引。</p><p>人民币按固定汇率 1 USD = 7 CNY 计算；人民币与微信支付请先联系客服。</p></aside></div></div></section>`;
+}
+
+function renderContractBox() {
+  let orders=[];try{orders=JSON.parse(localStorage.getItem('voyageur:pendingOrders')||'[]')}catch{}
+  const cards=orders.length?orders.map(order=>`<article class="card policy-card"><div class="trip-card-topline"><span class="eyebrow accent-text">${esc(order.id||'VOYAGEUR ORDER')}</span><span class="featured-badge">待联系确认</span></div><h2>${esc(order.name||'预订人')}</h2><div class="order-lines"><div><span>出发日期</span><strong>${esc(order.date||'—')}</strong></div><div><span>人数</span><strong>${Number(order.people)||0} 人</strong></div><div><span>订单总额</span><strong>${esc(order.totalFormatted||'—')}</strong></div><div><span>确认后应付</span><strong>${esc(order.dueFormatted||'—')}</strong></div><div><span>合同状态</span><strong>已勾选同意 · 待公司确认</strong></div></div></article>`).join(''):`<div class="card empty-state"><div class="summary-icon">盒</div><h3>合同盒暂无订单</h3><p>客人在此设备提交订单后，订单编号、合同确认和金额会显示在这里。</p><a class="btn btn-primary" href="#/trips">选择行程</a></div>`;
+  return `<section class="placeholder-page policy-page"><div class="container"><a class="back-link" href="#/more">← 返回更多</a><div class="eyebrow accent-text">CONTRACT BOX</div><h1 class="page-title">合同盒</h1><p class="page-subtitle">订单 · 合同确认 · 收据状态</p><div class="policy-grid">${cards}</div><div class="card policy-disclaimer"><strong>重要说明</strong><p>预览阶段资料仅保存在当前浏览器。正式上线前需连接安全订单数据库，才能让客人和公司跨设备查看同一订单。</p></div></div></section>`;
+}
+
 function renderMore(data) {
   const links=[
     ['合同盒','订单 · 合同 · 收据','#/contract-box'],['行程单','已选行程 · 门票 · 结账','#/cart'],['结账','填写资料 · 合同 · 联系确认后付款','#/trips'],
@@ -2798,6 +2811,8 @@ function renderClientPage(route) {
   if (routePath === '/inquiry') return renderInquiry(data, route);
   if (routePath === '/inquiry/success') return renderInquirySuccess(route);
   if (routePath === '/more') return renderMore(data);
+  if (routePath === '/cart') return renderCart(data);
+  if (routePath === '/contract-box') return renderContractBox();
   if (routePath === '/policies') return renderPolicies(data);
   if (routePath === '/privacy') return renderLegalPage('privacy');
   if (routePath === '/copyright') return renderLegalPage('copyright');
@@ -2834,7 +2849,7 @@ function initClientInteractions(route) {
       form.querySelector('[data-booking-total]').textContent=fmt(shownTotal,currency); form.querySelector('[data-booking-due]').textContent=fmt(shownDue,currency);
       return {tripId:form.dataset.tripId,date:form.elements.date.value,adults,children,people,variant:variant?.value||'',ticket:ticket?.value||'',payMode,currency,exchangeRate:rate,totalUsd:total,dueUsd:due,total:shownTotal,due:shownDue,totalFormatted:fmt(shownTotal,currency),dueFormatted:fmt(shownDue,currency)};
     };
-    const onChange=()=>calculate(); const onSubmit=e=>{e.preventDefault();const booking=calculate();if(!booking.date){form.elements.date.focus();return}sessionStorage.setItem('voyageur:checkout',JSON.stringify(booking));location.hash='/checkout'};
+    const onChange=()=>calculate(); const onSubmit=e=>{e.preventDefault();const booking=calculate();if(!booking.date){form.elements.date.focus();return}sessionStorage.setItem('voyageur:checkout',JSON.stringify(booking));location.hash='/cart'};
     form.addEventListener('input',onChange);form.addEventListener('change',onChange);form.addEventListener('submit',onSubmit);calculate();
     return ()=>{form.removeEventListener('input',onChange);form.removeEventListener('change',onChange);form.removeEventListener('submit',onSubmit)};
   }
