@@ -486,6 +486,21 @@ button { cursor: pointer; }
 .vehicle-space { border:1px dashed rgba(107,29,19,.18); color:var(--muted); font-weight:600; }
 .vehicle-luggage { margin-top:2px; border-radius:9px; background:rgba(107,29,19,.09); color:var(--muted); }
 .vehicle-layout-note { margin-top:9px; color:var(--muted); font-size:10px; line-height:1.55; }
+.more-app-page { padding-top:26px; }
+.more-app-shell { width:min(100%,480px); margin:0 auto; padding:0 16px 48px; }
+.more-app-shell > h1 { margin:0; font-size:24px; font-weight:700; }
+.more-brand-line { margin:5px 0 0; font-size:12px; letter-spacing:.15em; }
+.more-app-shell > h2 { margin:12px 0 0; font-size:18px; }
+.more-license-note,.more-app-note { color:var(--muted); font-size:12px; line-height:1.75; }
+.more-quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:22px 0; }
+.more-quick-grid .btn { min-height:48px; justify-content:center; padding:10px; font-size:12px; }
+.more-link-list { overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.more-link-list a { display:flex; min-height:62px; flex-direction:column; justify-content:center; padding:10px 16px; border-bottom:1px solid var(--line); color:var(--ink); }
+.more-link-list a:last-child { border-bottom:0; }
+.more-link-list strong { font-size:14px; }
+.more-link-list span { margin-top:3px; color:var(--muted); font-size:11px; }
+.more-app-note { margin:22px 0 10px; }
+.more-site-link { font-size:13px; text-decoration:underline; }
 .fleet-empty { grid-column:1/-1; justify-items:center; text-align:center; padding:44px; }
 .fleet-promise-section { padding-top:22px; padding-bottom:82px; }
 .fleet-promise-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
@@ -2549,29 +2564,42 @@ function renderPolicies(data) {
 }
 
 function renderMore(data) {
-  const contactItems = [
-    data.contacts.phone ? `<a class="card more-action-card" href="tel:${esc(data.contacts.phone)}"><span>☎</span><div><strong>电话联系</strong><small>${esc(data.contacts.phone)}</small></div><b>→</b></a>` : '',
-    data.contacts.email ? `<a class="card more-action-card" href="mailto:${esc(data.contacts.email)}"><span>✉</span><div><strong>Email</strong><small>${esc(data.contacts.email)}</small></div><b>→</b></a>` : '',
-    data.contacts.wechat ? `<div class="card more-action-card"><span>微</span><div><strong>微信</strong><small>${esc(data.contacts.wechat)}</small></div></div>` : '',
-    data.contacts.website ? `<a class="card more-action-card" href="${esc(data.contacts.website)}" target="_blank" rel="noopener"><span>网</span><div><strong>官方网站</strong><small>${esc(data.contacts.website)}</small></div><b>→</b></a>` : '',
-  ].filter(Boolean).join('');
-
+  const links=[
+    ['合同盒','订单 · 合同 · 收据','#/contract-box'],['行程单','已选行程 · 门票 · 结账','#/cart'],['结账','填写资料 · 合同 · 联系确认后付款','#/trips'],
+    ['伴旅行','每日路线 · 导航 · 天气','#/companion'],['AI 定制行程','中英文草案 · 发给客服报价','#/plan'],['操作演示 · Workflow demo','示例订单与派单 · 不下单、不扣款','#/operations-demo'],
+    ['出行交流说明','联系客服 · 非公开留言板','#/circle'],['司导','专业司导与服务团队','#/guides'],['车队','Sienna · Sprinter · Escalade','#/fleet'],
+    ['拉斯维加斯城市指南','大道分布 · 步行时间 · City Walk · 必吃榜','#/vegas'],['必吃榜','餐厅定位 · 招牌菜 · 预约提示','#/food'],['咨询客服','微信 · 电话 · 邮件','#/inquiry'],
+    ['隐私政策','个人资料、客片许可与撤下','#/privacy'],['服务条款','合同 · 取消 · 改期 · 退款政策','#/policies'],['版权保护','客片仅供浏览 · 禁止转载','#/copyright']
+  ];
   return `
-    <section class="placeholder-page more-page">
-      <div class="container">
-        <div class="eyebrow accent-text">MORE ABOUT VOYAGEUR</div>
-        <h1 class="page-title">更多</h1>
-        <p class="page-subtitle">查看车队、官方资质和联系方式，或者直接提交旅行咨询。</p>
-        <div class="module-grid more-module-grid">
-          <a class="card module-card module-link-card" href="#/fleet"><div class="icon">车</div><h3>我们的车队</h3><p>查看车型、乘客人数和行李容量。</p><span>查看车队 →</span></a>
-          <a class="card module-card module-link-card" href="#/licenses"><div class="icon">证</div><h3>官方资质</h3><p>查看管理员公开展示的资质和证明。</p><span>查看资质 →</span></a>
-          <a class="card module-card module-link-card" href="#/inquiry"><div class="icon">询</div><h3>旅游咨询</h3><p>告诉我们日期、人数、路线和其他需求。</p><span>开始咨询 →</span></a>
-          <a class="card module-card module-link-card" href="#/policies"><div class="icon">规</div><h3>价格与政策</h3><p>查看满减、退款改期、国家公园政策和付款规则。</p><span>查看政策 →</span></a>
+    <section class="placeholder-page more-page more-app-page">
+      <div class="more-app-shell">
+        <h1>VOYAGEUR TRAVEL USA</h1>
+        <p class="more-brand-line">VOYAGEUR TRAVEL &amp; JOURNEY</p>
+        <h2>放心 · 顺心 · 舒心 · 贴心</h2>
+        <p class="more-license-note">美国拉斯维加斯精品小团 · 私人包车 · 行程定制</p>
+        <div class="more-quick-grid">
+          <a href="tel:${esc(data.contacts.phone||'')}" class="btn btn-primary">☎ 打电话</a>
+          <a href="mailto:${esc(data.contacts.email||'')}" class="btn btn-secondary">✉ 发邮件</a>
+          <button type="button" class="btn btn-secondary" data-copy-wechat="${esc(data.contacts.wechat||'')}">微信 ${esc(data.contacts.wechat||'联系客服')}</button>
+          <a href="#/inquiry" class="btn btn-secondary">◌ 官网客服</a>
         </div>
-        <div class="section-head more-contact-head"><div><div class="eyebrow accent-text">CONTACT</div><h2>快捷联系</h2></div></div>
-        ${contactItems ? `<div class="more-contact-grid">${contactItems}</div>` : `<div class="card empty-state"><h3>联系方式暂未设置</h3><p>管理员可以在后台“联系方式”中添加电话、微信或 Email。</p></div>`}
+        <div class="more-link-list">${links.map(([title,subtitle,href])=>`<a href="${href}"><strong>${title}</strong><span>${subtitle}</span></a>`).join('')}</div>
+        <p class="more-app-note">本网站是 VOYAGEUR TRAVEL USA 的行程手册与下单入口。客人可填写资料、确认合同并提交订单；付款前须联系客服确认日期、库存与金额，价格以订单确认和合同为准。</p>
+        <a class="more-site-link" href="https://voyageurtravelusa.com" target="_blank" rel="noopener">打开官网 voyageurtravelusa.com</a>
       </div>
     </section>`;
+}
+
+function renderReferenceModule(route) {
+  const modules={
+    '/contract-box':['合同盒','订单、合同与收据资料'], '/cart':['行程单','已选行程、门票与金额汇总'], '/companion':['伴旅行','每日路线、导航与天气'],
+    '/plan':['AI 定制行程','生成中英文行程草案并联系客服报价'], '/operations-demo':['操作演示','示例订单与派单流程，不下单、不扣款'], '/circle':['出行交流说明','联系客服加入订单对应的出行沟通'],
+    '/guides':['司导','VOYAGEUR 司导与服务团队'], '/vegas':['拉斯维加斯城市指南','大道分布、步行时间与 City Walk'], '/food':['必吃榜','餐厅定位、招牌菜与预约提示'],
+    '/privacy':['隐私政策','个人资料、客片许可与撤下规则'], '/copyright':['版权保护','网站内容与客片使用说明']
+  };
+  const item=modules[route]; if(!item)return '';
+  return `<section class="placeholder-page"><div class="container"><a class="back-link" href="#/more">← 返回更多</a><div class="card not-found-card"><div class="eyebrow accent-text">VOYAGEUR</div><h1>${item[0]}</h1><p>${item[1]}</p><p>该页面的参考资料尚未上传。上传对应网页后，会按原页面结构完整补齐并替换为 VOYAGEUR 内容。</p></div></div></section>`;
 }
 
 function renderNotFound() {
@@ -2739,12 +2767,21 @@ function renderClientPage(route) {
   if (routePath === '/inquiry/success') return renderInquirySuccess(route);
   if (routePath === '/more') return renderMore(data);
   if (routePath === '/policies') return renderPolicies(data);
+  const referenceModule=renderReferenceModule(routePath);
+  if(referenceModule)return referenceModule;
   return renderNotFound();
 }
 
 
 function initClientInteractions(route) {
   const routePath = route.split('?')[0];
+
+  if(routePath==='/more'){
+    const button=document.querySelector('[data-copy-wechat]');
+    if(!button)return null;
+    const copy=async()=>{const value=button.dataset.copyWechat||'';if(!value)return;try{await navigator.clipboard.writeText(value);button.textContent='微信号已复制'}catch{button.textContent=`微信 ${value}`}};
+    button.addEventListener('click',copy);return()=>button.removeEventListener('click',copy);
+  }
 
   if (routePath.startsWith('/trip/')) {
     const form=document.querySelector('[data-booking-form]');
