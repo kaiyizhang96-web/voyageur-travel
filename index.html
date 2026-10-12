@@ -104,7 +104,7 @@ button { cursor: pointer; }
   border-top:1px solid var(--line);
   padding:8px 10px calc(8px + env(safe-area-inset-bottom));
 }
-.bottom-nav-inner { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; max-width:620px; margin:0 auto; }
+.bottom-nav-inner { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; max-width:480px; margin:0 auto; }
 .bottom-link { min-height:50px; border-radius:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:var(--muted); font-size:12px; }
 .bottom-link.active { background:var(--surface-2); color:var(--text); }
 
@@ -1878,14 +1878,14 @@ M.layout=(function(){
 const clientNav = [
   ['/', '首页', '⌂'],
   ['/trips', '行程', '⌖'],
-  ['/charter', '包车', '▣'],
-  ['/inquiry', '咨询', '✎'],
+  ['/play', '玩乐', '◇'],
   ['/more', '更多', '☰'],
 ];
 
 function clientLayout(content, route) {
-  const nav = clientNav.map(([path, label]) => `<a class="nav-link ${route===path?'active':''}" href="#${path}">${label}</a>`).join('');
-  const bottom = clientNav.map(([path, label, icon]) => `<a class="bottom-link ${route===path?'active':''}" href="#${path}"><span>${icon}</span><span>${label}</span></a>`).join('');
+  const active=path=>path==='/'?route==='/':route===path||route.startsWith(`${path}/`);
+  const nav = clientNav.map(([path, label]) => `<a class="nav-link ${active(path)?'active':''}" href="#${path}">${label}</a>`).join('');
+  const bottom = clientNav.map(([path, label, icon]) => `<a class="bottom-link ${active(path)?'active':''}" href="#${path}"><span>${icon}</span><span>${label}</span></a>`).join('');
   return `
     <div class="app-shell">
       <header class="topbar">
@@ -2439,10 +2439,11 @@ function renderInquiry(data, route) {
   const tripId = params.get('trip') || '';
   const vehicleId = params.get('vehicle') || '';
   const explicitType = params.get('type') || '';
+  const requestedSubject = params.get('subject') || '';
   const trip = data.trips.find((item) => item.id === tripId) || null;
   const vehicle = data.vehicles.find((item) => item.id === vehicleId) || null;
   const type = explicitType || (trip?.category === 'charter' ? 'charter' : trip ? 'trip' : 'general');
-  const subject = vehicle?.name || trip?.title || (type === 'charter' ? '定制包车' : '旅游咨询');
+  const subject = vehicle?.name || trip?.title || requestedSubject || (type === 'charter' ? '定制包车' : type === 'play' ? '玩乐票务' : '旅游咨询');
   const visibleTrips = data.trips.filter((item) => item.visible && item.category !== 'charter');
 
   return `
@@ -2602,6 +2603,18 @@ function renderReferenceModule(route) {
   return `<section class="placeholder-page"><div class="container"><a class="back-link" href="#/more">← 返回更多</a><div class="card not-found-card"><div class="eyebrow accent-text">VOYAGEUR</div><h1>${item[0]}</h1><p>${item[1]}</p><p>该页面的参考资料尚未上传。上传对应网页后，会按原页面结构完整补齐并替换为 VOYAGEUR 内容。</p></div></div></section>`;
 }
 
+function renderPlay() {
+  const products=[
+    ['羚羊谷门票','下羚羊谷 / 上羚羊谷','日期与场次需确认'],
+    ['大峡谷直升机','Papillon / Maverick','按航线与日期报价'],
+    ['鲍威尔湖体验','皮划艇 / 游船','按季节与库存确认'],
+    ['拉斯维加斯演出','热门秀票与活动','按座位等级报价'],
+    ['主题乐园门票','迪士尼 / 环球影城','授权出票渠道'],
+    ['国家公园体验','门票与行程组合','按身份与当日政策确认']
+  ];
+  return `<section class="placeholder-page"><div class="container"><div class="eyebrow accent-text">PLAY &amp; TICKETS</div><h1 class="page-title">玩乐</h1><p class="page-subtitle">门票、体验和演出需要先确认日期、场次与实时库存，确认前请勿付款。</p><div class="module-grid">${products.map(([name,type,note])=>`<article class="card module-card"><div class="icon">票</div><h3>${name}</h3><p>${type}</p><small>${note}</small><a class="detail-link" href="#/inquiry?type=play&amp;subject=${encodeURIComponent(name)}">咨询预订 →</a></article>`).join('')}</div></div></section>`;
+}
+
 function renderNotFound() {
   return `<section class="placeholder-page"><div class="container"><div class="card not-found-card"><div class="icon">?</div><h1>页面没有找到</h1><p>这个链接可能已经失效，或者页面地址不正确。</p><div class="success-actions"><a class="btn btn-primary" href="#/">返回首页</a><a class="btn btn-light" href="#/trips">浏览行程</a></div></div></div></section>`;
 }
@@ -2624,6 +2637,7 @@ function renderClientPage(route) {
   if (route === '/trips') return renderTripList(data);
   if (route === '/trips/day') return renderTripList(data, { title: '一日游', subtitle: '当天往返的精选路线，适合从拉斯维加斯轻松出发。', category: 'day' });
   if (route === '/trips/multi') return renderTripList(data, { title: '多日游', subtitle: '跨多天路线，进入详情可以按 Day 查看每天安排。', category: 'multi' });
+  if (route === '/play') return renderPlay();
   if (route === '/charter') return renderCharter(data);
   if (route === '/fleet') {
     const visible = data.vehicles.filter(v => v.visible).sort((a, b) => Number(a.order ?? 999) - Number(b.order ?? 999));
