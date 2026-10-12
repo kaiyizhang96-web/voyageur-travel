@@ -474,6 +474,18 @@ button { cursor: pointer; }
 .fleet-facts span { display:block; margin-bottom:4px; color:var(--muted); font-size:10px; }
 .fleet-facts strong { font-size:12px; line-height:1.45; }
 .fleet-card-actions { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+.vehicle-layout { margin:18px 0; padding:16px; border:1px solid var(--line); border-radius:18px; background:var(--surface-2); }
+.vehicle-layout-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:13px; }
+.vehicle-layout-head strong { font-size:13px; }
+.vehicle-layout-head span { color:var(--muted); font-size:10px; }
+.vehicle-cabin { display:grid; gap:7px; padding:12px; border:2px solid rgba(107,29,19,.28); border-radius:26px 26px 14px 14px; background:var(--surface); }
+.vehicle-row { display:grid; grid-template-columns:repeat(var(--cols,3),1fr); gap:7px; }
+.vehicle-seat,.vehicle-space,.vehicle-luggage { min-height:38px; display:grid; place-items:center; border-radius:10px; font-size:10px; font-weight:800; text-align:center; }
+.vehicle-seat { border:1px solid rgba(107,29,19,.22); background:#fff8f1; color:var(--accent); }
+.vehicle-seat.driver { background:var(--accent); color:#fff; }
+.vehicle-space { border:1px dashed rgba(107,29,19,.18); color:var(--muted); font-weight:600; }
+.vehicle-luggage { margin-top:2px; border-radius:9px; background:rgba(107,29,19,.09); color:var(--muted); }
+.vehicle-layout-note { margin-top:9px; color:var(--muted); font-size:10px; line-height:1.55; }
 .fleet-empty { grid-column:1/-1; justify-items:center; text-align:center; padding:44px; }
 .fleet-promise-section { padding-top:22px; padding-bottom:82px; }
 .fleet-promise-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
@@ -2246,6 +2258,7 @@ function charterVehicleCards(vehicles, charterId) {
           <div><span>乘客</span><strong>最多 ${esc(vehicle.seats || '待确认')} 人</strong></div>
           <div><span>行李</span><strong>${esc(vehicle.luggage || '按车型确认')}</strong></div>
         </div>
+        ${vehicleSeatLayout(vehicle)}
         <a class="btn btn-primary charter-inquiry-btn" href="#/inquiry?type=charter&trip=${encodeURIComponent(charterId || '')}&vehicle=${encodeURIComponent(vehicle.id)}">咨询此车型</a>
       </div>
     </article>`).join('')}</div>`;
@@ -2565,6 +2578,16 @@ function renderNotFound() {
   return `<section class="placeholder-page"><div class="container"><div class="card not-found-card"><div class="icon">?</div><h1>页面没有找到</h1><p>这个链接可能已经失效，或者页面地址不正确。</p><div class="success-actions"><a class="btn btn-primary" href="#/">返回首页</a><a class="btn btn-light" href="#/trips">浏览行程</a></div></div></div></section>`;
 }
 
+function vehicleSeatLayout(vehicle) {
+  const name=String(vehicle.name||'').toLowerCase();
+  const row=(items,cols=3)=>`<div class="vehicle-row" style="--cols:${cols}">${items.map(item=>item==='driver'?'<span class="vehicle-seat driver">司机</span>':item==='seat'?'<span class="vehicle-seat">乘客</span>':item==='aisle'?'<span class="vehicle-space">过道</span>':`<span class="vehicle-space">${esc(item)}</span>`).join('')}</div>`;
+  let rows=[];
+  if(name.includes('sienna')) rows=[row(['driver','seat'],2),row(['seat','aisle','seat']),row(['seat','seat','seat'])];
+  else if(name.includes('sprinter')) rows=[row(['driver','aisle','seat']),row(['seat','seat','aisle','seat'],4),row(['seat','seat','aisle','seat'],4),row(['seat','seat','aisle','seat'],4),row(['seat','seat','seat','seat'],4)];
+  else rows=[row(['driver','seat'],2),row(['seat','aisle','seat']),row(['seat','seat','seat'])];
+  return `<div class="vehicle-layout"><div class="vehicle-layout-head"><strong>车型座位布局</strong><span>俯视示意图</span></div><div class="vehicle-cabin">${rows.join('')}<div class="vehicle-luggage">后备箱 / 行李区</div></div><div class="vehicle-layout-note">座位与行李空间为车型示意，最终车辆和座位安排以出发前确认为准。</div></div>`;
+}
+
 function renderClientPage(route) {
   const data = getData();
 
@@ -2590,6 +2613,7 @@ function renderClientPage(route) {
             <div><span>乘客</span><strong>最多 ${esc(v.seats || '待确认')} 人</strong></div>
             <div><span>行李</span><strong>${esc(v.luggage || '按车型确认')}</strong></div>
           </div>
+          ${vehicleSeatLayout(v)}
           <div class="fleet-card-actions">
             <a class="btn btn-primary" href="#/inquiry?type=charter&vehicle=${encodeURIComponent(v.id)}">咨询此车型</a>
             <a class="detail-link" href="#/charter">查看包车服务 →</a>
